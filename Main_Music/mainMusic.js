@@ -285,8 +285,11 @@ function addNewSong() {
                 var musician = input.question("\u001B[1m  Enter Musician Name:  \u001B[0m");
                 nameSongDone = nameSong;
                 var song = new Song_1.Song(idSong, nameSongDone, singer, musician);
-                theListSong.add(song);
-                // theListAlbum.findAll()[theListAlbum.findAll().length-1].listSong.push(song);
+                // theListSong.add(song);
+                // for (let i = 0; i < theListAlbum.listAlbum.length; i++) {
+                //
+                // }
+                theListAlbum.findAll()[theListAlbum.findAll().length - 1].listSong.push(song);
                 theListAlbum.findAll()[theListAlbum.findAll().length - 1].listSong.forEach(function (e) {
                     console.log(e.name);
                 });

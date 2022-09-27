@@ -317,11 +317,14 @@ function addNewSong() {
             if (testSongName == false) {
                 console.log(`\x1b[31m  Please re-enter Song Name !!  \x1b[0m`);
             } else {
-                let singer = input.question(`\x1b[1m  Enter Singer Name:  \x1b[0m`);
+                let singer   = input.question(`\x1b[1m  Enter Singer Name:  \x1b[0m`);
                 let musician = input.question(`\x1b[1m  Enter Musician Name:  \x1b[0m`);
                 nameSongDone = nameSong;
                 let song = new Song(idSong, nameSongDone,singer,musician);
-                theListSong.add(song);
+                // theListSong.add(song);
+                // for (let i = 0; i < theListAlbum.listAlbum.length; i++) {
+                //
+                // }
                 theListAlbum.findAll()[theListAlbum.findAll().length-1].listSong.push(song);
                 theListAlbum.findAll()[theListAlbum.findAll().length-1].listSong.forEach(e=>{
                     console.log(e.name)
@@ -346,10 +349,10 @@ function remakeSong() {
     if (songID == -1) {
         console.log(`\x1b[31m  Song ID not found`)
     } else {
-        let id = +input.question(`\x1b[1m   Enter Song ID:             \x1b[0m`)
-        let name = input.question(`\x1b[1m    Enter Song Name:           \x1b[0m`)
-        let singer = input.question(`\x1b[1m    Enter Performing Singer :  \x1b[0m`)
-        let musician = input.question(`\x1b[1m    Enter Composer:            \x1b[0m`)
+        let id       = +input.question(`\x1b[1m   Enter Song ID:             \x1b[0m`)
+        let name     =  input.question(`\x1b[1m    Enter Song Name:           \x1b[0m`)
+        let singer   =  input.question(`\x1b[1m    Enter Performing Singer :  \x1b[0m`)
+        let musician =  input.question(`\x1b[1m    Enter Composer:            \x1b[0m`)
 
         theListSong.edit(id, new Song(id, name, singer, musician))
     }
