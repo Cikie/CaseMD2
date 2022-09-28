@@ -88,7 +88,7 @@ function showAccount() {
     console.log(theListAccount);
 }
 function musicManager() {
-    var menuAlbum = "\u001B[35m  -----Music Manager-----  \u001B[0m\n\n    \u001B[34m   1.Add new Album     \u001B[0m\n    \u001B[34m   2.Rename Album      \u001B[0m\n    \u001B[34m   3.Find Album        \u001B[0m\n    \u001B[34m   4.Show all Album    \u001B[0m\n    \u001B[34m   5.Delete Album      \u001B[0m\n    \u001B[34m   6.Manage Song       \u001B[0m\n    \u001B[34m   0.Exit              \u001B[0m";
+    var menuAlbum = "\u001B[35m  -----Music Manager-----  \u001B[0m\n\n    \u001B[34m   1.Add new Album     \u001B[0m\n    \u001B[34m   2.Rename Album      \u001B[0m\n    \u001B[34m   3.Find Album        \u001B[0m\n    \u001B[34m   4.Show all Album    \u001B[0m\n    \u001B[34m   5.Delete Album      \u001B[0m\n    \u001B[34m   6.Manage Song       \u001B[0m\n    \u001B[34m   7.Add Song to Album \u001B[0m\n    \u001B[34m   0.Exit              \u001B[0m";
     var choiceAlbum;
     do {
         console.log(menuAlbum);
@@ -112,6 +112,9 @@ function musicManager() {
                 break;
             case 6:
                 managerSong();
+                break;
+            case 7:
+                addSongToAlbum();
                 break;
             case 0:
                 break;
@@ -160,20 +163,23 @@ function addAlbum() {
                 frag = true;
                 frag2 = true;
                 console.log("\u001B[32m  New album has been added !!  \u001B[0m");
-                var selectChoice = "\u001B[1m  Did u want to add new song?? \u001B[0m\n                \u001B[1m   1.Yes  \u001B[0m\n                \u001B[1m   0.No   \u001B[0m";
-                var choice2 = void 0;
-                do {
-                    console.log(selectChoice);
-                    choice2 = +input.question("\u001B[1m Enter your selection:  \u001B[0m");
-                    switch (choice2) {
-                        case 1:
-                            addNewSong();
-                            break;
-                        case 2:
-                            break;
-                    }
-                } while (choice2 != 0);
-                break;
+                //
+                // let selectChoice = `\x1b[1m  Did u want to add new song?? \x1b[0m
+                // \x1b[1m   1.Yes  \x1b[0m
+                // \x1b[1m   0.No   \x1b[0m`
+                // let choice2;
+                // do {
+                //     console.log(selectChoice)
+                //     choice2 = +input.question(`\x1b[1m Enter your selection:  \x1b[0m`)
+                //     switch (choice2){
+                //         case 1:
+                //             addNewSong();
+                //             break;
+                //         case 2:
+                //             break;
+                //     }
+                // }while (choice2 != 0)
+                // break;
             }
         } while (frag2 == false);
     } while (frag == false);
@@ -215,6 +221,28 @@ function menuDeleteAlbum() {
                 break;
         }
     } while (choice1 != 0);
+}
+function addSongToAlbum() {
+    var id = +input.question("\u001B[1m  Enter your Album ID: \u001B[0m");
+    var idAlbum = theListAlbum.findById(id);
+    if (idAlbum == -1) {
+        console.log("\u001B[31m  Album ID not Found !!  \u001B[0m");
+    }
+    else {
+        var selectChoice = "\u001B[1m  Did u want to add new song?? \u001B[0m\n                // \u001B[1m   1.Yes  \u001B[0m\n                // \u001B[1m   0.No   \u001B[0m";
+        var choice2 = void 0;
+        do {
+            console.log(selectChoice);
+            choice2 = +input.question("\u001B[1m Enter your selection:  \u001B[0m");
+            switch (choice2) {
+                case 1:
+                    addNewSong();
+                    break;
+                case 2:
+                    break;
+            }
+        } while (choice2 != 0);
+    }
 }
 function managerSong() {
     var menuSong = "\u001B[35m  -----Song Manage-----  \u001B[0m \n\n    \u001B[34m   1.Add new Song to Album   \u001B[0m\n    \u001B[34m   2.Find Song               \u001B[0m\n    \u001B[34m   3.Remake Song             \u001B[0m\n    \u001B[34m   4.Delete Song             \u001B[0m\n    \u001B[34m   5.Show all Song           \u001B[0m\n    \u001B[34m   0.Exit                    \u001B[0m";

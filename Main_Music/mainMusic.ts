@@ -107,6 +107,7 @@ function musicManager() {
     \x1b[34m   4.Show all Album    \x1b[0m
     \x1b[34m   5.Delete Album      \x1b[0m
     \x1b[34m   6.Manage Song       \x1b[0m
+    \x1b[34m   7.Add Song to Album \x1b[0m
     \x1b[34m   0.Exit              \x1b[0m`
 
     let choiceAlbum;
@@ -132,6 +133,9 @@ function musicManager() {
                 break;
             case 6:
                 managerSong();
+                break;
+            case 7:
+                addSongToAlbum();
                 break;
             case 0:
                 break;
@@ -179,23 +183,6 @@ function addAlbum() {
                 frag = true;
                 frag2 = true;
                 console.log(`\x1b[32m  New album has been added !!  \x1b[0m`);
-
-                let selectChoice = `\x1b[1m  Did u want to add new song?? \x1b[0m
-                \x1b[1m   1.Yes  \x1b[0m
-                \x1b[1m   0.No   \x1b[0m`
-                let choice2;
-                do {
-                    console.log(selectChoice)
-                    choice2 = +input.question(`\x1b[1m Enter your selection:  \x1b[0m`)
-                    switch (choice2){
-                        case 1:
-                            addNewSong();
-                            break;
-                        case 2:
-                            break;
-                    }
-                }while (choice2 != 0)
-                break;
             }
         } while (frag2 == false);
     } while (frag == false);
@@ -245,6 +232,30 @@ function menuDeleteAlbum() {
                 break;
         }
     } while (choice1 != 0)
+}
+
+function addSongToAlbum() {
+    let id = +input.question(`\x1b[1m  Enter your Album ID: \x1b[0m`)
+    let idAlbum = theListAlbum.findById(id);
+    if (idAlbum == -1) {
+        console.log(`\x1b[31m  Album ID not Found !!  \x1b[0m`)
+    } else {
+        let selectChoice = `\x1b[1m  Did u want to add new song?? \x1b[0m
+                // \x1b[1m   1.Yes  \x1b[0m
+                // \x1b[1m   0.No   \x1b[0m`
+        let choice2;
+        do {
+            console.log(selectChoice)
+            choice2 = +input.question(`\x1b[1m Enter your selection:  \x1b[0m`)
+            switch (choice2){
+                case 1:
+                    addNewSong();
+                    break;
+                case 2:
+                    break;
+            }
+        }while (choice2 != 0)
+    }
 }
 
 function managerSong() {
@@ -317,18 +328,15 @@ function addNewSong() {
             if (testSongName == false) {
                 console.log(`\x1b[31m  Please re-enter Song Name !!  \x1b[0m`);
             } else {
-                let singer   = input.question(`\x1b[1m  Enter Singer Name:  \x1b[0m`);
+                let singer = input.question(`\x1b[1m  Enter Singer Name:  \x1b[0m`);
                 let musician = input.question(`\x1b[1m  Enter Musician Name:  \x1b[0m`);
                 nameSongDone = nameSong;
-                let song = new Song(idSong, nameSongDone,singer,musician);
-                // theListSong.add(song);
-                // for (let i = 0; i < theListAlbum.listAlbum.length; i++) {
-                //
-                // }
-                theListAlbum.findAll()[theListAlbum.findAll().length-1].listSong.push(song);
-                theListAlbum.findAll()[theListAlbum.findAll().length-1].listSong.forEach(e=>{
-                    console.log(e.name)
-                })
+                let song = new Song(idSong, nameSongDone, singer, musician);
+                theListSong.add(song);
+                theListAlbum.findAll()[theListAlbum.findAll().length - 1].listSong.push(song);
+                // theListAlbum.findAll()[theListAlbum.findAll().length - 1].listSong.forEach(e => {
+                //     console.log(e.name)
+                // })
                 fragSong = true;
                 fragSong2 = true;
                 console.log(`\x1b[32m  New song has been added !!  \x1b[0m`);
@@ -349,10 +357,10 @@ function remakeSong() {
     if (songID == -1) {
         console.log(`\x1b[31m  Song ID not found`)
     } else {
-        let id       = +input.question(`\x1b[1m   Enter Song ID:             \x1b[0m`)
-        let name     =  input.question(`\x1b[1m    Enter Song Name:           \x1b[0m`)
-        let singer   =  input.question(`\x1b[1m    Enter Performing Singer :  \x1b[0m`)
-        let musician =  input.question(`\x1b[1m    Enter Composer:            \x1b[0m`)
+        let id = +input.question(`\x1b[1m   Enter Song ID:             \x1b[0m`)
+        let name = input.question(`\x1b[1m    Enter Song Name:           \x1b[0m`)
+        let singer = input.question(`\x1b[1m    Enter Performing Singer :  \x1b[0m`)
+        let musician = input.question(`\x1b[1m    Enter Composer:            \x1b[0m`)
 
         theListSong.edit(id, new Song(id, name, singer, musician))
     }
