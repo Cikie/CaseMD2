@@ -23,12 +23,15 @@ var ManagerSong = /** @class */ (function () {
         return 'Invalid Song  !';
     };
     ManagerSong.prototype.findByName = function (name) {
-        for (var i = 0; i < this.listSong.length; i++) {
-            if (this.listSong[i].name == name) {
-                return this.listSong[i];
-            }
+        var listNameSong = this.listSong.filter((function (item) {
+            return item.name.toUpperCase().includes(name.toUpperCase());
+        }));
+        if (listNameSong.length == 0) {
+            console.log("\u001B[31m  This Album name not Found !  \u001B[0m");
         }
-        return 'This Song name not Found !';
+        else {
+            console.log(listNameSong);
+        }
     };
     ManagerSong.prototype.deleteById = function (id) {
         var index = this.findById(id);
@@ -40,6 +43,13 @@ var ManagerSong = /** @class */ (function () {
     };
     ManagerSong.prototype.findAll = function () {
         return this.listSong;
+    };
+    ManagerSong.prototype.showAllSong = function () {
+        var str = "";
+        for (var i = 0; i < this.listSong.length; i++) {
+            str += "\u001B[32m  ".concat(i + 1, " Id:  ").concat(this.listSong[i].id, ". Name: ").concat(this.listSong[i].name, "  Singer: ").concat(this.listSong[i].singer, "  Musician:  ").concat(this.listSong[i].musician, "  \u001B[0m \n");
+        }
+        return str;
     };
     return ManagerSong;
 }());

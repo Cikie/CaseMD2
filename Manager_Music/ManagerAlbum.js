@@ -19,16 +19,18 @@ var ManagerAlbum = /** @class */ (function () {
                 return i;
             }
         }
-        return 'InvaLid Album';
+        return "\u001B[31m  IvaLid Album  \u001B[0m";
     };
     ManagerAlbum.prototype.findByName = function (name) {
-        for (var i = 0; i < this.listAlbum.length; i++) {
-            if (this.listAlbum[i].name == name) {
-                return this.listAlbum[i];
-            }
+        var listNameAlbum = this.listAlbum.filter((function (item) {
+            return item.name.toUpperCase().includes(name.toUpperCase());
+        }));
+        if (listNameAlbum.length == 0) {
+            console.log("\u001B[31m  This Album name not Found !  \u001B[0m");
         }
-        return 'This Album name not Found !';
-        // this.listAlbum.filter(item =>item.name.includes(name))
+        else {
+            console.log(listNameAlbum);
+        }
     };
     ManagerAlbum.prototype.deleteById = function (id) {
         var index = this.findById(id);
@@ -39,14 +41,6 @@ var ManagerAlbum = /** @class */ (function () {
         this.listAlbum[index] = t;
     };
     ManagerAlbum.prototype.findAll = function () {
-        // for (let i = 0; i < this.listAlbum.length; i++) {
-        //
-        // }
-        // this.listAlbum.forEach(e=>{
-        //     e.listSong.forEach(j=>{
-        //         console.log(j)
-        //     })
-        // })
         return this.listAlbum;
     };
     return ManagerAlbum;

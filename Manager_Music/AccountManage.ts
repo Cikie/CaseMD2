@@ -1,7 +1,7 @@
 import {Account} from "../Model_Music/Account";
 import {Manager} from "./Manager";
 
-export class AccountManange implements Manager<Account>{
+export class AccountManage implements Manager<Account>{
     listAccount:Account[] = [];
 
     add(t: Account) {
@@ -16,10 +16,6 @@ export class AccountManange implements Manager<Account>{
     edit(id: number, t: Account) {
         let index = this.findById(id);
         this.listAccount[index] = t;
-    }
-
-    findAll() {
-        return this.listAccount
     }
 
     findById(id: number):any {
@@ -40,4 +36,15 @@ export class AccountManange implements Manager<Account>{
         return 'This Account is not found !'
     }
 
+    findAll() {
+        return this.listAccount
+    }
+
+    findAllAccount() {
+        let strAccount = ``
+        for (let i = 0; i < this.listAccount.length; i++) {
+            strAccount += `\x1b[32m  ${i + 1}. UserName: ${this.listAccount[i].username} . Password: ${this.listAccount[i].password}  \x1b[0m \n`
+        }
+        return strAccount;
+    }
 }

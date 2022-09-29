@@ -1,12 +1,14 @@
-export class Account {
-    private _id:number
+import {ManagerAlbum} from "../Manager_Music/ManagerAlbum";
+
+export class Account extends ManagerAlbum {
+    private _id: number
     private _username: string;
-    private _passWord: string;
+    private _password: string;
 
-
-    constructor( Username: string, Password: string) {
+    constructor(Username: string, Password: string) {
+        super()
         this._username = Username;
-        this._passWord = Password;
+        this._password = Password;
     }
 
     get username(): string {
@@ -17,12 +19,12 @@ export class Account {
         this._username = value;
     }
 
-    get passWord(): string {
-        return this._passWord;
+    get password(): string {
+        return this._password;
     }
 
-    set passWord(value: string) {
-        this._passWord = value;
+    set password(value: string) {
+        this._password = value;
     }
 
     get id(): number {
@@ -32,4 +34,6 @@ export class Account {
     set id(value: number) {
         this._id = value;
     }
+
+
 }

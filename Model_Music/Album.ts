@@ -1,15 +1,18 @@
-import {Song} from "./Song";
 import {ManagerSong} from "../Manager_Music/ManagerSong";
+import {Song} from "./Song";
+import {Account} from "./Account";
 
-export class Album extends ManagerSong{
+export class Album extends ManagerSong {
     private _id: number;
     private _name: string;
-    listSong;
+    listSong: Song[] = [];
+    private _createdUser: Account;
 
-    constructor(id: number, name: string) {
+    constructor(id: number, name: string, createdUser: Account) {
         super();
         this._id = id;
         this._name = name;
+        this._createdUser = createdUser;
     }
 
     get id(): number {
@@ -28,4 +31,19 @@ export class Album extends ManagerSong{
         this._name = value;
     }
 
+    get createdUser(): Account {
+        return this._createdUser;
+    }
+
+    set createdUser(value: Account) {
+        this._createdUser = value;
+    }
+
+    findAllSong() {
+        let strAlbum = ``
+        for (let i = 0; i < this.listSong.length; i++) {
+            strAlbum += `\x1b[32m  ${i + 1} Id:  ${this.listSong[i].id}. Name: ${this.listSong[i].name}  Singer: ${this.listSong[i].singer}  Musician:  ${this.listSong[i].musician}  \x1b[0m \n`
+        }
+        return strAlbum;
+    }
 }

@@ -24,12 +24,13 @@ export class ManagerSong implements Manager<Song> {
     }
 
     findByName(name: string) {
-        for (let i = 0; i < this.listSong.length; i++) {
-            if (this.listSong[i].name == name){
-                return this.listSong[i];
-            }
+        let listNameSong = this.listSong.filter((item =>
+            item.name.toUpperCase().includes(name.toUpperCase())))
+        if (listNameSong.length == 0){
+            console.log(`\x1b[31m  This Album name not Found !  \x1b[0m`)
+        }else {
+            console.log(listNameSong)
         }
-        return 'This Song name not Found !'
     }
 
     deleteById(id: number) {
@@ -45,8 +46,11 @@ export class ManagerSong implements Manager<Song> {
     findAll() {
         return this.listSong
     }
-
-
-
-
+    showAllSong(){
+        let strSong =``;
+        for (let i = 0; i < this.listSong.length; i++) {
+            strSong += `\x1b[32m  ${i + 1} Id:  ${this.listSong[i].id}. Name: ${this.listSong[i].name}  Singer: ${this.listSong[i].singer}  Musician:  ${this.listSong[i].musician}  \x1b[0m \n`
+        }
+        return strSong;
+    }
 }

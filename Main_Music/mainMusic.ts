@@ -1,14 +1,15 @@
 import {Album} from "../Model_Music/Album";
 import {ManagerAlbum} from "../Manager_Music/ManagerAlbum";
 import {ManagerSong} from "../Manager_Music/ManagerSong";
-import {AccountManange} from "../Manager_Music/AccountManange";
+import {AccountManage} from "../Manager_Music/AccountManage";
 import {Account} from "../Model_Music/Account";
 import {Song} from "../Model_Music/Song";
 
 let input = require(`readline-sync`);
 let theListAlbum: ManagerAlbum = new ManagerAlbum();
 let theListSong: ManagerSong = new ManagerSong();
-let theListAccount: AccountManange = new AccountManange();
+let theListAccount: AccountManage = new AccountManage();
+let currentUser:Account;
 
 function LoginMenu() {
     let loginMenu = `\x1b[35m-----Login-----\x1b[0m\n
@@ -38,7 +39,7 @@ function LoginMenu() {
         let userName = input.question(`\x1b[1m  Enter Username: \x1b[0m`);
         let passWord = input.question(`\x1b[1m  Enter Password: \x1b[0m`);
         for (let i = 0; i < theListAccount.listAccount.length; i++) {
-            if (theListAccount.listAccount[i].username == userName && theListAccount.listAccount[i].passWord == passWord) {
+            if (theListAccount.listAccount[i].username == userName && theListAccount.listAccount[i].password == passWord) {
                 musicManager();
                 checkLogin = false;
                 console.log(`\x1b[32m Login Success !! \x1b[0m`);
@@ -96,7 +97,7 @@ function register() {
 }
 
 function showAccount() {
-    console.log(theListAccount);
+    console.log(theListAccount.findAllAccount())
 }
 
 function musicManager() {
@@ -104,11 +105,10 @@ function musicManager() {
     \x1b[34m   1.Add new Album     \x1b[0m
     \x1b[34m   2.Rename Album      \x1b[0m
     \x1b[34m   3.Find Album        \x1b[0m
-    \x1b[34m   4.Show all Album    \x1b[0m
+    \x1b[34m   4.Show Song On Album\x1b[0m
     \x1b[34m   5.Delete Album      \x1b[0m
     \x1b[34m   6.Manage Song       \x1b[0m
-    \x1b[34m   7.Add Song to Album \x1b[0m
-    \x1b[34m   0.Exit              \x1b[0m`
+    \x1b[34m   0.Log Out           \x1b[0m`
 
     let choiceAlbum;
     do {
@@ -126,16 +126,14 @@ function musicManager() {
                 findAlbum(selectName);
                 break;
             case 4:
-                showAllAlbum();
+                let selectAlbum = +input.question(`\x1b[1m  Enter Album ID:  \x1b[0m`);
+                showSongOnAlbum(selectAlbum);
                 break;
             case 5:
                 menuDeleteAlbum();
                 break;
             case 6:
                 managerSong();
-                break;
-            case 7:
-                addSongToAlbum();
                 break;
             case 0:
                 break;
@@ -174,11 +172,12 @@ function addAlbum() {
                 }
             }
             let nameAlbumDone: string;
+            let userCreat = input.question(`\x1b[1m  Enter User Name:  \x1b[0m`)
             if (testAlbumName == false) {
                 console.log(`\x1b[31m  Please re-enter Album Name !!  \x1b[0m`);
             } else {
                 nameAlbumDone = name;
-                let album = new Album(id, nameAlbumDone);
+                let album = new Album(id, nameAlbumDone,userCreat);
                 theListAlbum.add(album);
                 frag = true;
                 frag2 = true;
@@ -197,8 +196,9 @@ function renameAlbum() {
     } else {
         let id = +input.question(`\x1b[1m  Enter your ID: \x1b[0m`);
         let name = input.question('\x1b[1m  Enter your Name: \x1b[0m ');
+        let userCreat = input.question(`\x1b[1m  Enter User Name:  \x1b[0m`)
 
-        theListAlbum.edit(id, new Album(id, name))
+        theListAlbum.edit(id, new Album(id, name,userCreat))
     }
 }
 
@@ -210,8 +210,17 @@ function deleteAlbum(id: number) {
     theListAlbum.deleteById(id)
 }
 
-function showAllAlbum() {
-    console.log(theListAlbum.findAll());
+function showSongOnAlbum(id: number) {
+    let arr: Album[] = theListAlbum.findAll();
+    if (arr.length == 0) {
+        console.log(`\x1b[31m   This Album is Empty !!   \x1b[0m`)
+    } else {
+        for (let i = 0; i < arr.length; i++) {
+            if(arr[i].id == id){
+                console.log(arr[i].findAllSong())
+            }
+        }
+    }
 }
 
 function menuDeleteAlbum() {
@@ -226,6 +235,7 @@ function menuDeleteAlbum() {
         switch (choice1) {
             case 1:
                 deleteAlbum(selectID);
+                console.log(`\x1b[32m Delete Success  \x1b[0m`)
                 return musicManager()
             case 2:
                 musicManager();
@@ -247,20 +257,20 @@ function addSongToAlbum() {
         do {
             console.log(selectChoice)
             choice2 = +input.question(`\x1b[1m Enter your selection:  \x1b[0m`)
-            switch (choice2){
+            switch (choice2) {
                 case 1:
                     addNewSong();
                     break;
                 case 2:
                     break;
             }
-        }while (choice2 != 0)
+        } while (choice2 != 0)
     }
 }
 
 function managerSong() {
     let menuSong = `\x1b[35m  -----Song Manage-----  \x1b[0m \n
-    \x1b[34m   1.Add new Song to Album   \x1b[0m
+    \x1b[34m   1.Add new Song            \x1b[0m
     \x1b[34m   2.Find Song               \x1b[0m
     \x1b[34m   3.Remake Song             \x1b[0m
     \x1b[34m   4.Delete Song             \x1b[0m
@@ -272,7 +282,7 @@ function managerSong() {
         choiceSong = +input.question(`\x1b[01m   Enter your selection:  \x1b[0m`)
         switch (choiceSong) {
             case 1:
-                addNewSong()
+                addSongToAlbum();
                 break;
             case 2:
                 let nameSong = input.question(`\x1b[1m   Enter Song Name:   \x1b[0m`);
@@ -334,9 +344,6 @@ function addNewSong() {
                 let song = new Song(idSong, nameSongDone, singer, musician);
                 theListSong.add(song);
                 theListAlbum.findAll()[theListAlbum.findAll().length - 1].listSong.push(song);
-                // theListAlbum.findAll()[theListAlbum.findAll().length - 1].listSong.forEach(e => {
-                //     console.log(e.name)
-                // })
                 fragSong = true;
                 fragSong2 = true;
                 console.log(`\x1b[32m  New song has been added !!  \x1b[0m`);
@@ -348,7 +355,7 @@ function addNewSong() {
 }
 
 function findSong(name: string) {
-    theListAlbum.findByName(name);
+   theListSong.findByName(name);
 }
 
 function remakeSong() {
@@ -372,7 +379,7 @@ function deleteSong(id: number) {
 }
 
 function showAllSong() {
-    console.log(theListSong.findAll());
+    console.log(theListSong.showAllSong());
 }
 
 LoginMenu();

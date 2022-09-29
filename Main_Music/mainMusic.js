@@ -3,13 +3,14 @@ exports.__esModule = true;
 var Album_1 = require("../Model_Music/Album");
 var ManagerAlbum_1 = require("../Manager_Music/ManagerAlbum");
 var ManagerSong_1 = require("../Manager_Music/ManagerSong");
-var AccountManange_1 = require("../Manager_Music/AccountManange");
+var AccountManage_1 = require("../Manager_Music/AccountManage");
 var Account_1 = require("../Model_Music/Account");
 var Song_1 = require("../Model_Music/Song");
 var input = require("readline-sync");
 var theListAlbum = new ManagerAlbum_1.ManagerAlbum();
 var theListSong = new ManagerSong_1.ManagerSong();
-var theListAccount = new AccountManange_1.AccountManange();
+var theListAccount = new AccountManage_1.AccountManage();
+var currentUser;
 function LoginMenu() {
     var loginMenu = "\u001B[35m-----Login-----\u001B[0m\n\n    \u001B[1m  1.Login :  \u001B[0m\n    \u001B[1m  2.Register :  \u001B[0m\n    \u001B[1m  3.Show Account : \u001B[0m";
     var choice;
@@ -85,10 +86,10 @@ function register() {
     } while (flag == false);
 }
 function showAccount() {
-    console.log(theListAccount);
+    console.log(theListAccount.findAllAccount());
 }
 function musicManager() {
-    var menuAlbum = "\u001B[35m  -----Music Manager-----  \u001B[0m\n\n    \u001B[34m   1.Add new Album     \u001B[0m\n    \u001B[34m   2.Rename Album      \u001B[0m\n    \u001B[34m   3.Find Album        \u001B[0m\n    \u001B[34m   4.Show all Album    \u001B[0m\n    \u001B[34m   5.Delete Album      \u001B[0m\n    \u001B[34m   6.Manage Song       \u001B[0m\n    \u001B[34m   7.Add Song to Album \u001B[0m\n    \u001B[34m   0.Exit              \u001B[0m";
+    var menuAlbum = "\u001B[35m  -----Music Manager-----  \u001B[0m\n\n    \u001B[34m   1.Add new Album     \u001B[0m\n    \u001B[34m   2.Rename Album      \u001B[0m\n    \u001B[34m   3.Find Album        \u001B[0m\n    \u001B[34m   4.Show Song On Album\u001B[0m\n    \u001B[34m   5.Delete Album      \u001B[0m\n    \u001B[34m   6.Manage Song       \u001B[0m\n    \u001B[34m   0.Log Out           \u001B[0m";
     var choiceAlbum;
     do {
         console.log(menuAlbum);
@@ -105,16 +106,14 @@ function musicManager() {
                 findAlbum(selectName);
                 break;
             case 4:
-                showAllAlbum();
+                var selectAlbum = +input.question("\u001B[1m  Enter Album ID:  \u001B[0m");
+                showSongOnAlbum(selectAlbum);
                 break;
             case 5:
                 menuDeleteAlbum();
                 break;
             case 6:
                 managerSong();
-                break;
-            case 7:
-                addSongToAlbum();
                 break;
             case 0:
                 break;
@@ -153,33 +152,17 @@ function addAlbum() {
                 }
             }
             var nameAlbumDone = void 0;
+            var userCreat = input.question("\u001B[1m  Enter User Name:  \u001B[0m");
             if (testAlbumName == false) {
                 console.log("\u001B[31m  Please re-enter Album Name !!  \u001B[0m");
             }
             else {
                 nameAlbumDone = name_1;
-                var album = new Album_1.Album(id, nameAlbumDone);
+                var album = new Album_1.Album(id, nameAlbumDone, userCreat);
                 theListAlbum.add(album);
                 frag = true;
                 frag2 = true;
                 console.log("\u001B[32m  New album has been added !!  \u001B[0m");
-                //
-                // let selectChoice = `\x1b[1m  Did u want to add new song?? \x1b[0m
-                // \x1b[1m   1.Yes  \x1b[0m
-                // \x1b[1m   0.No   \x1b[0m`
-                // let choice2;
-                // do {
-                //     console.log(selectChoice)
-                //     choice2 = +input.question(`\x1b[1m Enter your selection:  \x1b[0m`)
-                //     switch (choice2){
-                //         case 1:
-                //             addNewSong();
-                //             break;
-                //         case 2:
-                //             break;
-                //     }
-                // }while (choice2 != 0)
-                // break;
             }
         } while (frag2 == false);
     } while (frag == false);
@@ -193,7 +176,8 @@ function renameAlbum() {
     else {
         var id_1 = +input.question("\u001B[1m  Enter your ID: \u001B[0m");
         var name_2 = input.question('\x1b[1m  Enter your Name: \x1b[0m ');
-        theListAlbum.edit(id_1, new Album_1.Album(id_1, name_2));
+        var userCreat = input.question("\u001B[1m  Enter User Name:  \u001B[0m");
+        theListAlbum.edit(id_1, new Album_1.Album(id_1, name_2, userCreat));
     }
 }
 function findAlbum(name) {
@@ -202,8 +186,18 @@ function findAlbum(name) {
 function deleteAlbum(id) {
     theListAlbum.deleteById(id);
 }
-function showAllAlbum() {
-    console.log(theListAlbum.findAll());
+function showSongOnAlbum(id) {
+    var arr = theListAlbum.findAll();
+    if (arr.length == 0) {
+        console.log("\u001B[31m   This Album is Empty !!   \u001B[0m");
+    }
+    else {
+        for (var i = 0; i < arr.length; i++) {
+            if (arr[i].id == id) {
+                console.log(arr[i].findAllSong());
+            }
+        }
+    }
 }
 function menuDeleteAlbum() {
     var selectID = +input.question("\u001B[1m  Enter Album ID: \u001B[0m");
@@ -215,6 +209,7 @@ function menuDeleteAlbum() {
         switch (choice1) {
             case 1:
                 deleteAlbum(selectID);
+                console.log("\u001B[32m Delete Success  \u001B[0m");
                 return musicManager();
             case 2:
                 musicManager();
@@ -245,14 +240,14 @@ function addSongToAlbum() {
     }
 }
 function managerSong() {
-    var menuSong = "\u001B[35m  -----Song Manage-----  \u001B[0m \n\n    \u001B[34m   1.Add new Song to Album   \u001B[0m\n    \u001B[34m   2.Find Song               \u001B[0m\n    \u001B[34m   3.Remake Song             \u001B[0m\n    \u001B[34m   4.Delete Song             \u001B[0m\n    \u001B[34m   5.Show all Song           \u001B[0m\n    \u001B[34m   0.Exit                    \u001B[0m";
+    var menuSong = "\u001B[35m  -----Song Manage-----  \u001B[0m \n\n    \u001B[34m   1.Add new Song            \u001B[0m\n    \u001B[34m   2.Find Song               \u001B[0m\n    \u001B[34m   3.Remake Song             \u001B[0m\n    \u001B[34m   4.Delete Song             \u001B[0m\n    \u001B[34m   5.Show all Song           \u001B[0m\n    \u001B[34m   0.Exit                    \u001B[0m";
     var choiceSong;
     do {
         console.log(menuSong);
         choiceSong = +input.question("\u001B[01m   Enter your selection:  \u001B[0m");
         switch (choiceSong) {
             case 1:
-                addNewSong();
+                addSongToAlbum();
                 break;
             case 2:
                 var nameSong = input.question("\u001B[1m   Enter Song Name:   \u001B[0m");
@@ -313,14 +308,8 @@ function addNewSong() {
                 var musician = input.question("\u001B[1m  Enter Musician Name:  \u001B[0m");
                 nameSongDone = nameSong;
                 var song = new Song_1.Song(idSong, nameSongDone, singer, musician);
-                // theListSong.add(song);
-                // for (let i = 0; i < theListAlbum.listAlbum.length; i++) {
-                //
-                // }
+                theListSong.add(song);
                 theListAlbum.findAll()[theListAlbum.findAll().length - 1].listSong.push(song);
-                theListAlbum.findAll()[theListAlbum.findAll().length - 1].listSong.forEach(function (e) {
-                    console.log(e.name);
-                });
                 fragSong = true;
                 fragSong2 = true;
                 console.log("\u001B[32m  New song has been added !!  \u001B[0m");
@@ -331,7 +320,7 @@ function addNewSong() {
     theListAlbum.findAll();
 }
 function findSong(name) {
-    theListAlbum.findByName(name);
+    theListSong.findByName(name);
 }
 function remakeSong() {
     var id = +input.question(" \u001B[1m   Enter Song ID:  \u001B[0m");
@@ -351,6 +340,6 @@ function deleteSong(id) {
     theListSong.deleteById(id);
 }
 function showAllSong() {
-    console.log(theListSong.findAll());
+    console.log(theListSong.showAllSong());
 }
 LoginMenu();

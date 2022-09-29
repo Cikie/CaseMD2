@@ -19,17 +19,17 @@ export class ManagerAlbum implements Manager<Album> {
                 return i
             }
         }
-        return 'InvaLid Album'
+        return `\x1b[31m  IvaLid Album  \x1b[0m`
     }
 
     findByName(name: string) {
-        for (let i = 0; i < this.listAlbum.length; i++) {
-            if (this.listAlbum[i].name == name){
-                return this.listAlbum[i];
-            }
+        let listNameAlbum = this.listAlbum.filter((item =>
+        item.name.toUpperCase().includes(name.toUpperCase())))
+        if (listNameAlbum.length == 0){
+            console.log(`\x1b[31m  This Album name not Found !  \x1b[0m`)
+        }else {
+            console.log(listNameAlbum)
         }
-        return 'This Album name not Found !'
-        // this.listAlbum.filter(item =>item.name.includes(name))
     }
 
     deleteById(id: number) {
@@ -42,15 +42,7 @@ export class ManagerAlbum implements Manager<Album> {
         this.listAlbum[index] = t
     }
 
-    findAll() {
-        // for (let i = 0; i < this.listAlbum.length; i++) {
-        //
-        // }
-        // this.listAlbum.forEach(e=>{
-        //     e.listSong.forEach(j=>{
-        //         console.log(j)
-        //     })
-        // })
+    findAll() :Album[]{
         return this.listAlbum;
     }
 
